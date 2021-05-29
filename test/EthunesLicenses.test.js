@@ -108,7 +108,6 @@ contract(
         const licenseId = await this.ethunesLicenses.encode(
           LICENSE_DETAILS_1211
         );
-        console.log('lic', licenseId.toString())
         expect(licenseId).to.be.bignumber.equal(LICENSE_1211);
       });
     });
