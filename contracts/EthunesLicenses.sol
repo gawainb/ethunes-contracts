@@ -47,14 +47,14 @@ contract EthunesLicenses is ERC1155 {
      */
     function decode(uint256 _tokenId) public pure returns (uint256 songId, uint32 categoryId, uint8 purposeId) {
         // first byte is the purpose id, next 4 bytes is the categoryId and the remaining is the songId 
-        return ( _tokenId << 48 >> 48, uint32(_tokenId << 8 >> 224), uint8 (_tokenId >> 248) );
+        return ( _tokenId >> 40, uint32(_tokenId << 216 >> 224), uint8 (_tokenId << 248 >> 248) );
     }
 
     /**
      * @dev encode license details into tokenId
      */
     function encode(License calldata license) public pure returns (uint256 tokenId) {
-       return license.songId + (uint256(license.categoryId) << 216) + (uint256(license.purposeId) << 248); 
+       return (uint256(license.songId) << 40) + (uint256(license.categoryId) << 8) + uint256(license.purposeId); 
     }
 
     /**
