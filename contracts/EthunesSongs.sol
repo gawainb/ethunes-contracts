@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "./EthunesAccessControl.sol";
 
 /**
  * @title Ethunes songs NFT contract
@@ -41,10 +42,16 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private operatorApprovals;
 
+    uint256 public tokenPointer; 
+
+    EthunesAccessControl public ethunesAccessControl;
+
     // Mapping for token URIs
     mapping(uint256 => string) internal tokenURIs;
 
-    constructor() {}
+    constructor(EthunesAccessControl _ethunesAccessControl) {
+        ethunesAccessControl = _ethunesAccessControl;
+    }
 
     /**
      * @dev See {IERC165-supportsInterface}.
@@ -76,12 +83,7 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      * @dev See {IERC721-ownerOf}.
      */
     function ownerOf(uint256 _tokenId) public view override returns (address) {
-        address owner = owners[_tokenId];
-        require(
-            owner != address(0),
-            "ERC721: owner query for nonexistent token"
-        );
-        return owner;
+        return owners[_tokenId];
     }
 
     /**
@@ -109,6 +111,8 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
     function _baseURI() internal pure returns (string memory) {
         return BASE_URL;
     }
+
+    //TODO: SET BASE URI ONLYADMIN
 
     /**
      * @dev See {IERC721-approve}.
@@ -287,8 +291,9 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _safeMint(address _to, uint256 _tokenId) internal {
-        _safeMint(_to, _tokenId, "");
+    function mint(address _to, string calldata _uri) external {
+        require(ethunesAccessControl.hasContractWhitelistRole(_msgSender()), "EthunesToken.mint: caller it not whitelisted.");
+        _safeMint(_to, _uri, "");
     }
 
     /**
@@ -297,12 +302,14 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      */
     function _safeMint(
         address _to,
-        uint256 _tokenId,
+        string calldata _uri,
         bytes memory _data
     ) internal {
-        _mint(_to, _tokenId);
+        tokenPointer += 1;
+        uint256 tokenId = tokenPointer;
+        _mint(_to, tokenId, _uri);
         require(
-            _checkOnERC721Received(address(0), _to, _tokenId, _data),
+            _checkOnERC721Received(address(0), _to, tokenId, _data),
             "ERC721: transfer to non ERC721Receiver implementer"
         );
     }
@@ -319,7 +326,7 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _mint(address _to, uint256 _tokenId) internal {
+    function _mint(address _to, uint256 _tokenId, string calldata _uri) internal {
         require(_to != address(0) && _to != DEAD_ADDRESS, "ERC721: mint to the zero address");
         require(!_exists(_tokenId), "ERC721: token already minted");
 
@@ -327,6 +334,8 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
 
         balances[_to] += 1;
         owners[_tokenId] = _to;
+
+        tokenURIs[_tokenId] = _uri;
 
         emit Transfer(address(0), _to, _tokenId);
     }
