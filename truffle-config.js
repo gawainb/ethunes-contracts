@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-const INFURA = `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
-
+const RINKEBY = `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
+const GOERLI = `https://goerli.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
 const MNEUMONICS = process.env.MNEUMONICS;
 
 function getMnemonic(network) {
@@ -20,7 +20,7 @@ module.exports = {
       settings: {
         optimizer: {
           enabled: true, // Default: false
-          runs: 900, // Number of times you expect the contract to run. Default: 200. TODO: increase this before deploying the stable version.
+          runs: 900,     // Number of times you expect the contract to run. Default: 200. TODO: increase this before deploying the stable version.
         },
       },
     },
@@ -33,7 +33,7 @@ module.exports = {
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider(MNEUMONICS, INFURA);
+        return new HDWalletProvider(MNEUMONICS, RINKEBY);
       },
       network_id: 4,
       gas: 9278228,
@@ -42,11 +42,11 @@ module.exports = {
     },
     goerli: {
       provider: function () {
-        return new HDWalletProvider(MNEUMONICS, INFURA);
+        return new HDWalletProvider(MNEUMONICS, GOERLI);
       },
       network_id: 5,
       gas: 9278228,
-      gasPrice: 25000000000, // 25 Gwei. default = 100 gwei = 100000000000
+      gasPrice: 5000000000, // 25 Gwei. default = 100 gwei = 100000000000
       skipDryRun: true,
     },
   },
