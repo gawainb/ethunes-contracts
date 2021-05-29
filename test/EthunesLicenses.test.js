@@ -20,7 +20,7 @@ contract(
     const SONG_12 = new BN("1");
     const CATEGORY_1 = new BN("1");
     const PURPOSE_1 = new BN("1");
-    const LICENSE_1211 = new BN("111");
+    const LICENSE_1211 = new BN("452312848688578680041881346888105167735506309919053548679680298785221640193");
     const SUPPLY = new BN("10")
     const LICENSE_DETAILS_1211 = {
       songId: SONG_12.toString(),
@@ -120,5 +120,7 @@ contract(
         ).to.be.equal(CATEGORY_1_URI);
       });
     });
+
+    
   }
 );
