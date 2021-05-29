@@ -320,7 +320,7 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      * Emits a {Transfer} event.
      */
     function _mint(address _to, uint256 _tokenId) internal {
-        require(_to != address(0), "ERC721: mint to the zero address");
+        require(_to != address(0) && _to != DEAD_ADDRESS, "ERC721: mint to the zero address");
         require(!_exists(_tokenId), "ERC721: token already minted");
 
         _beforeTokenTransfer(address(0), _to, _tokenId);
