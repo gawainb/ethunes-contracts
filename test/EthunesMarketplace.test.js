@@ -71,6 +71,7 @@ contract(
         await this.ethunesMarketpalce.publishSongAndLicense(SONG_1_URI, [CATEGORY_1], [PURPOSE_1], [ONE_ETH], { from: songOwner });
 
         const SONG_1_OWNER = await this.ethunesSongs.ownerOf(SONG_1)
+        expect(SONG_1_OWNER).to.be.equal(songOwner)
       });
 
       it("should list license", async () => {
@@ -82,7 +83,12 @@ contract(
           { from: songOwner }
         );
 
-        expectEvent(logs, "EthunesLicenseAdded");
+        expectEvent(logs, "EthunesLicenseAdded", {
+          price: ONE_ETH,
+          publisher: songOwner
+        });
+
+        
       });
     });
 
@@ -97,6 +103,7 @@ contract(
          );
 
          const SONG_1_OWNER = await this.ethunesSongs.ownerOf(SONG_1);
+         expect(SONG_1_OWNER).to.be.equal(songOwner);
        });
        it("should mint license-1155", async () => {
          const songOwnerBalanceBefore = await balance.current(songOwner)
