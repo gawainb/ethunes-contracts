@@ -3,6 +3,11 @@
 
 Producers, music companies or individual collectors can also earn incomings from the new licenses sold. Original musicians will still receive royalties.
 
+## Connected Repos
+[Front-end](https://github.com/Ethunes/ethunes-frontend)
+
+[Subgraph](https://github.com/Ethunes/ethunes-subgraph)
+
 ## How to begin
     - git clone https://github.com/Ethunes/ethunes-contracts.git
     - npm i
