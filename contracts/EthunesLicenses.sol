@@ -60,12 +60,15 @@ contract EthunesLicenses is ERC1155 {
     /**
      * @dev mint iff owner owns this ERC721 token
      */
-    function mint(address _licenseHolder, License calldata _license, uint256 _amount) external {
+    function mint(address _licenseHolder, License calldata _license, uint256 _amount) external returns(uint256) {
         // Check to caller owns the ERC721
         // License memory license = decode(tokenId);
         require(ethunesSongs.ownerOf(_license.songId) == _msgSender() ||
         ethunesAccessControl.hasContractWhitelistRole(_msgSender()), "permission denied");
-        _mint(_licenseHolder, encode(_license), _amount, "");
+        uint256 licenseId = encode(_license);
+        _mint(_licenseHolder, licenseId, _amount, "");
+
+        return licenseId;
     }
 
     /**
@@ -76,4 +79,6 @@ contract EthunesLicenses is ERC1155 {
         licenseCategories[_categoryId] = _uri;
         emit LicenseCategoryUpdated(_categoryId, bytes(_uri));
     }
+
+    // function categoryURI
 }
