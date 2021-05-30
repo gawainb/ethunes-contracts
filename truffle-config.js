@@ -20,7 +20,7 @@ module.exports = {
       settings: {
         optimizer: {
           enabled: true, // Default: false
-          runs: 900,     // Number of times you expect the contract to run. Default: 200. TODO: increase this before deploying the stable version.
+          runs: 900, // Number of times you expect the contract to run. Default: 200. TODO: increase this before deploying the stable version.
         },
       },
     },
@@ -45,8 +45,8 @@ module.exports = {
         return new HDWalletProvider(MNEUMONICS, GOERLI);
       },
       network_id: 5,
-      gas: 9278228,
-      gasPrice: 5000000000, // 25 Gwei. default = 100 gwei = 100000000000
+      gas: 7000000, // default = 4712388
+      gasPrice: 50000000000, // 25 Gwei. default = 100 gwei = 100000000000
       skipDryRun: true,
     },
   },

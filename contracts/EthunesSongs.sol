@@ -291,9 +291,9 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function mint(address _to, string calldata _uri) external {
+    function mint(address _to, string calldata _uri) external returns (uint256) {
         require(ethunesAccessControl.hasContractWhitelistRole(_msgSender()), "EthunesToken.mint: caller it not whitelisted.");
-        _safeMint(_to, _uri, "");
+        return _safeMint(_to, _uri, "");
     }
 
     /**
@@ -304,7 +304,8 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
         address _to,
         string calldata _uri,
         bytes memory _data
-    ) internal {
+        
+    ) internal returns(uint256 _tokenId) {
         tokenPointer += 1;
         uint256 tokenId = tokenPointer;
         _mint(_to, tokenId, _uri);
@@ -312,6 +313,7 @@ contract EthunesSongs is Context, ERC165, IERC721, IERC721Metadata {
             _checkOnERC721Received(address(0), _to, tokenId, _data),
             "ERC721: transfer to non ERC721Receiver implementer"
         );
+        return tokenId;
     }
 
     /**
